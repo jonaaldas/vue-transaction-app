@@ -37,7 +37,7 @@
 						id="default-search"
 						v-model="searchAddressQuery"
 						class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						placeholder="Search for Transaction"
+						placeholder="Search for Address"
 						required
 					/>
 					<button
@@ -81,7 +81,7 @@
 				>
 					<li
 						v-for="(address, index) in addresses"
-						@click="(e) => addTransaction(e)"
+						@click="(e) => addAddressToTransactionForm(e)"
 						:key="index"
 						class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 					>
@@ -113,46 +113,46 @@
 				<div class="flex flex-row space-x-2">
 					<div class="flex items-center">
 						<input
-							class="hidden"
+							class="peer hidden"
 							type="radio"
-							value="seller"
+							:value="['seller']"
 							v-model="transactionData.transactionType"
 							name="seller"
 							id="seller"
 						/>
 						<label
 							for="seller"
-							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-300 cursor-pointer peer-checked:bg-blue-400"
 							>Seller</label
 						>
 					</div>
 					<div class="flex items-center">
 						<input
-							class="hidden"
+							class="hidden peer"
 							type="radio"
-							value="buyer"
+							:value="['buyer']"
 							v-model="transactionData.transactionType"
 							name="buyer"
 							id="buyer"
 						/>
 						<label
 							for="buyer"
-							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-300 cursor-pointer peer-checked:bg-blue-400"
 							>Buyer</label
 						>
 					</div>
 					<div class="flex items-center">
 						<input
-							class="hidden"
+							class="peer hidden"
 							type="radio"
-							value="both"
+							:value="['buyer', 'seller']"
 							v-model="transactionData.transactionType"
 							name="both"
 							id="both"
 						/>
 						<label
 							for="both"
-							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300"
+							class="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded hover:bg-blue-300 cursor-pointer peer-checked:bg-blue-400"
 							>Both</label
 						>
 					</div>
@@ -173,6 +173,7 @@
 						<input
 							type="text"
 							id="first_name"
+							v-model="transactionData.clientFirstName"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="John"
 							required
@@ -187,6 +188,7 @@
 						<input
 							type="text"
 							id="last_name"
+							v-model="transactionData.clientLastName"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Last Name"
 							required
@@ -203,6 +205,7 @@
 						<input
 							type="email"
 							id="email"
+							v-model="transactionData.clientEmail"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="john@gmail.com"
 							required
@@ -217,6 +220,7 @@
 						<input
 							type="tel"
 							id="phoneNumber"
+							v-model="transactionData.clientPhoneNumber"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="732 485 2890"
 							required
@@ -239,11 +243,47 @@
 						<input
 							type="text"
 							id="address"
+							v-model="transactionData.address"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="123 Main St"
 							required
 						/>
 					</div>
+					<div class="w-full md:w-1/2">
+						<label
+							for="city"
+							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+							>City</label
+						>
+						<input
+							type="text"
+							id="city"
+							v-model="transactionData.city"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+							placeholder="City"
+							required
+						/>
+					</div>
+					<div class="w-full md:w-1/2">
+						<label
+							for="zipCode"
+							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+							>Zip Code</label
+						>
+						<input
+							type="text"
+							id="zipCode"
+							v-model="transactionData.postalCode"
+							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+							placeholder="Zip Code"
+							required
+						/>
+					</div>
+				</div>
+
+				<div
+					class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2"
+				>
 					<div class="w-full md:w-1/2">
 						<label
 							for="saleAmount"
@@ -253,54 +293,44 @@
 						<input
 							type="number"
 							id="saleAmount"
+							v-model="transactionData.saleAmount"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="$300,000"
 							required
 						/>
 					</div>
-				</div>
-				<div
-					class="flex flex-col space-y-2 md:space-y-0 md:flex-row md:space-x-2"
-				>
-					<div class="w-full md:w-1/2">
-						<label
-							for="comission"
-							class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-							>Your Comission</label
+					<div class="relative w-full md:w-1/2">
+						<div
+							class="absolute inset-y-0 left-0 top-[22px] flex items-center pl-3 pointer-events-none"
 						>
-						<input
-							type="comission"
-							id="number"
-							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-							placeholder="3%"
-							required
-						/>
-					</div>
-					<div class="w-full md:w-1/2">
-						<div class="relative max-w-sm">
-							<div
-								class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+							<svg
+								aria-hidden="true"
+								class="w-5 h-5 text-gray-500 dark:text-gray-400"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+								xmlns="http://www.w3.org/2000/svg"
 							>
-								<svg
-									aria-hidden="true"
-									class="w-5 h-5 text-gray-500 dark:text-gray-400"
-									fill="currentColor"
-									viewBox="0 0 20 20"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										fill-rule="evenodd"
-										d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-										clip-rule="evenodd"
-									></path>
-								</svg>
-							</div>
+								<path
+									fill-rule="evenodd"
+									d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+									clip-rule="evenodd"
+								></path>
+							</svg>
+						</div>
+						<div class="max-w-sm">
+							<label
+								for="saleAmount"
+								class="block mb-2 text-xs font-medium text-gray-900 dark:text-white"
+								>Estimate Closing Date
+							</label>
 							<input
-								ref="date-picker"
-								datepicker
+								monthpicker
+								monthpicker-autohide
 								type="text"
-								class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500 sm:text-sm"
+								v-model="transactionData.transactionClosingDate"
+								class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pl-[32px]"
 								placeholder="Select date"
+								id="datepickerId"
 							/>
 						</div>
 					</div>
@@ -313,6 +343,7 @@
 						<input
 							type="comission"
 							id="number"
+							v-model="transactionData.comission"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="3%"
 							required
@@ -335,6 +366,7 @@
 						<input
 							type="text"
 							id="agentFirstName"
+							v-model="transactionData.agentFirstName"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Agent First Name"
 							required
@@ -349,6 +381,7 @@
 						<input
 							type="text"
 							id="agentLastName"
+							v-model="transactionData.agentLastName"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Agent Last Name"
 							required
@@ -365,6 +398,7 @@
 						<input
 							type="tel"
 							id="agentPhoneNumber"
+							v-model="transactionData.agentPhoneNumber"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Agent Phone Number"
 							required
@@ -379,6 +413,7 @@
 						<input
 							type="email"
 							id="agentEmail"
+							v-model="transactionData.agentEmail"
 							class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 							placeholder="Agent Email"
 							required
@@ -393,22 +428,66 @@
 <script setup>
 	import Datepicker from 'flowbite-datepicker/Datepicker';
 	import axios from 'axios';
-	import { ref } from 'vue';
-	const addresses = ref([]);
-	const searchAddressQuery = ref('');
+	import { onMounted, ref } from 'vue';
+
 	const addressPicked = ref('');
 
 	// form data
 	const transactionData = ref({
-		transactionType: '',
-		transactionDate: '',
-		transactionPrice: '',
+		transactionType: [],
+		transactionClosingDate: '',
 		agentFirstName: '',
 		agentLastName: '',
 		agentPhoneNumber: '',
 		agentEmail: '',
 		comission: '',
+		address: '',
+		city: '',
+		postalCode: '',
+		clientFirstName: '',
+		clientLastName: '',
+		clientEmail: '',
+		clientPhoneNumber: '',
+		saleAmount: '',
 	});
+
+	// picking type of transaction
+	const typeOfTransaction = (transaction) => {
+		if (transactionType.value.has(transaction)) {
+			transactionType.value.delete(transaction);
+		} else {
+			transactionType.value.set(transaction, transaction);
+		}
+		transactionData.value.transactionType = Array.from(
+			transactionType.value.keys()
+		);
+	};
+
+	// store transaction picked
+	const transactionType = ref(new Map());
+
+	const closeDropdown = () => {
+		addresses.value = [];
+		searchAddressQuery.value = '';
+	};
+	const addAddressToTransactionForm = (e) => {
+		addressPicked.value = addresses.value.filter((address) => {
+			if (address.properties.formatted === e.target.innerText) {
+				return address;
+			}
+		});
+
+		transactionData.value.address =
+			addressPicked.value[0]?.properties.address_line1;
+		transactionData.value.city = addressPicked.value[0]?.properties.city;
+		transactionData.value.postalCode =
+			addressPicked.value[0]?.properties.postcode;
+		closeDropdown();
+	};
+
+	// Address API
+	const addresses = ref([]);
+	const searchAddressQuery = ref('');
 	const loadAddresses = async () => {
 		const params = {
 			text: searchAddressQuery.value,
@@ -426,20 +505,11 @@
 			console.log(err);
 		}
 	};
-	const closeDropdown = () => {
-		addresses.value = [];
-		searchAddressQuery.value = '';
-	};
-	const addTransaction = (e) => {
-		addressPicked.value = addresses.value.find(
-			(address) => address.properties.formatted === e.target.innerText
-		);
 
-		console.log(addressPicked.value);
-	};
-
-	const datepickerEl = document.getElementById('datepickerId');
-	new Datepicker(datepickerEl, {});
+	onMounted(() => {
+		const datepickerEl = document?.getElementById('datepickerId');
+		new Datepicker(datepickerEl, {});
+	});
 </script>
 
 <style></style>
