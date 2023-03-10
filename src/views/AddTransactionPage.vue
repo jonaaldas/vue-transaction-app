@@ -427,6 +427,7 @@
 
 <script setup>
 	import Datepicker from 'flowbite-datepicker/Datepicker';
+	import EachTransactionInfo from './EachTransactionInfo.vue';
 	import axios from 'axios';
 	import { onMounted, ref } from 'vue';
 

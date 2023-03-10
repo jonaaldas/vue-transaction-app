@@ -12,35 +12,46 @@
 		<div class="p-5">
 			<a href="#">
 				<h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900">
-					3417 Ravens Crest Dr
+					{{ transactionAddress }}
 				</h5>
 			</a>
 			<div class="mb-2">
 				<span
 					class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full"
-					>Seller</span
-				>
-				<span
-					class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full"
-					>Buyer</span
+					v-for="(type, index) in transactionType"
+					:key="index"
+					>{{ type }}</span
 				>
 			</div>
 			<p class="mb-3 font-normal text-gray-700">
-				<strong>Name</strong>: Jonathan Aldas
+				<strong>Name</strong>: {{ clientFirstName }}
+				{{ clientLastName }}
 			</p>
 			<p class="mb-3 font-normal text-gray-700">
-				<strong>Amount</strong>: $500,000
+				<strong>Amount</strong>: {{ transactionAmount }}
 			</p>
-			<button
-				type="button"
-				class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+
+			<RouterLink
+				:to="{ name: 'EachTransactionInfo', params: { id: index } }"
+				class="inline-block px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green"
+				>View Transaction</RouterLink
 			>
-				See More
-			</button>
 		</div>
 	</div>
 </template>
 
-<script setup></script>
+<script setup>
+	import { defineProps } from 'vue';
+	import { RouterLink } from 'vue-router';
+
+	const props = defineProps([
+		'transactionAddress',
+		'transactionType',
+		'clientFirstName',
+		'clientLastName',
+		'transactionAmount',
+		'index',
+	]);
+</script>
 
 <style></style>

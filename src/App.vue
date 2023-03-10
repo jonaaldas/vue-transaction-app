@@ -1,12 +1,13 @@
 <template>
 	<div>
+		<!-- <SideBarVue /> -->
 		<RouterView></RouterView>
 	</div>
 </template>
 
 <script setup>
-	import { RouterLink, RouterView } from 'vue-router';
 	import './assets/tailwind.css';
+	import SideBarVue from './components/SideBar.vue';
 </script>
 
 <style></style>

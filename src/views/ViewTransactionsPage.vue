@@ -106,19 +106,27 @@
 		<div
 			class="md:grid md:grid-cols-2 md:grid-flow-row lg:grid-cols-3 2xl:grid-cols-4"
 		>
-			<TransactionDisplayCard />
-			<TransactionDisplayCard />
-			<TransactionDisplayCard />
-			<TransactionDisplayCard />
-			<TransactionDisplayCard />
+			<TransactionDisplayCard
+				v-for="(transaction, index) in store.transactions"
+				:key="index"
+				:transactionAddress="transaction.address"
+				:transactionType="transaction.transactionType"
+				:clientFirstName="transaction.clientFirstName"
+				:clientLastName="transaction.clientLastName"
+				:transactionAmount="transaction.saleAmount"
+				:index="index"
+			/>
 		</div>
 	</div>
 </template>
 
 <script setup>
 	import axios from 'axios';
+	import { useTransactionStore } from '@/stores/transactionsStore';
 	import { ref } from 'vue';
 	import { defineAsyncComponent } from 'vue';
+
+	const store = useTransactionStore();
 	const TransactionDisplayCard = defineAsyncComponent(() =>
 		import('../components/TransactionDisplayCard.vue')
 	);
